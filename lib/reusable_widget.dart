@@ -23,14 +23,10 @@ void promptDialog(context, content) {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              backgroundColor:
-              Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 1,
-                horizontal: 2.0,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 2.0),
               child: Text(
                 "Close",
                 style: TextStyle(

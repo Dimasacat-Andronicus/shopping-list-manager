@@ -102,14 +102,19 @@ class _ListDisplayState extends State<ListDisplay> {
                     ),
                     keyboardType: TextInputType.number,
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
-                      onChanged: (value) {
-                        if (value.isNotEmpty) {
-                          int? numValue = int.tryParse(value);
-                          if (numValue == null || numValue <= 0 || numValue > 999999) {
-                            quantityController.text = value.substring(0, value.length - 1);
-                          }
+                    onChanged: (value) {
+                      if (value.isNotEmpty) {
+                        int? numValue = int.tryParse(value);
+                        if (numValue == null ||
+                            numValue <= 0 ||
+                            numValue > 999999) {
+                          quantityController.text = value.substring(
+                            0,
+                            value.length - 1,
+                          );
                         }
                       }
+                    },
                   ),
                   SizedBox(height: 10),
                   TextField(
@@ -230,8 +235,7 @@ class _ListDisplayState extends State<ListDisplay> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                backgroundColor:
-                Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(

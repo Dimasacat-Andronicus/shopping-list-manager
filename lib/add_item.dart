@@ -102,7 +102,7 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
                     _quantity.text = value.substring(0, value.length - 1);
                   }
                 }
-              }
+              },
             ),
             SizedBox(height: 12),
             TextField(
