@@ -31,6 +31,10 @@ class ListDisplay extends StatefulWidget {
 class _ListDisplayState extends State<ListDisplay> {
   final title = "Edit Item";
   final content = "updated";
+  String? selectedValueOrder = 'Ascending';
+  final List<String> orderItems = ['Ascending', 'Descending'];
+  String? selectedValueFilter = 'by Item Name';
+  final List<String> filterItems = ['by Item Name', 'by Quantity'];
 
   void _showEditDialog(int index) {
     TextEditingController nameController = TextEditingController(
@@ -271,6 +275,42 @@ class _ListDisplayState extends State<ListDisplay> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  DropdownButton<String>(
+                    value: selectedValueOrder,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValueOrder = value;
+                      });
+                    },
+                    items: orderItems.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item),
+                      );
+                    }).toList(), // Convert list to dropdown menu items
+                  ),
+                  DropdownButton<String>(
+                    value: selectedValueFilter,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValueFilter = value;
+                      });
+                    },
+                    items: filterItems.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item),
+                      );
+                    }).toList(), // Convert list to dropdown menu items
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child:
                   ListData.itemList.isEmpty
