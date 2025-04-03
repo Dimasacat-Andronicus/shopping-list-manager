@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void promptDialog(context, content) {
+void promptDialog(context, content, listName) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -11,7 +11,7 @@ void promptDialog(context, content) {
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         content: Text(
-          "The item $content successfully!",
+          "The item \"$listName\" $content successfully!",
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
         actions: [
