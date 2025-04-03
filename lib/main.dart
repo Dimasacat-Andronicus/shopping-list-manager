@@ -1,4 +1,5 @@
 import 'package:crud_flutter_shopping/shopping_list_class.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'add_item.dart';
 import 'list_page.dart';
@@ -69,9 +70,11 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             onPressed: () {
               for (var item = 0; item < ListData.itemList.length; item++) {
-                print(
+                if (kDebugMode) {
+                  print(
                   "${ListData.itemList[item].name}, ${ListData.itemList[item].quantity}, ${ListData.itemList[item].brand}",
                 );
+                }
               }
             },
             icon: Icon(Icons.check_circle_outline, color: Color(0xFFF0F4F8)),
