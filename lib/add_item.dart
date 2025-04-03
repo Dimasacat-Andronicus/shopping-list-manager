@@ -44,7 +44,7 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
             brand: _brand.text,
           ),
         );
-        promptDialog(context, content);
+        promptDialog(context, content, _listName.text);
         _listName.clear();
         _quantity.clear();
         _brand.clear();
