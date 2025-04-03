@@ -159,7 +159,7 @@ class _ListDisplayState extends State<ListDisplay> {
                               brandController.text,
                             );
                             Navigator.of(context).pop();
-                            promptDialog(context, content);
+                            promptDialog(context, content, nameController.text);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -217,7 +217,7 @@ class _ListDisplayState extends State<ListDisplay> {
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           content: Text(
-            "Do you want to remove permanently?",
+            "Do you want to remove \"${ListData.itemList[index].name}\" permanently?",
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           actions: [
@@ -281,6 +281,7 @@ class _ListDisplayState extends State<ListDisplay> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   DropdownButton<String>(
+                    padding: const EdgeInsets.only(right: 20),
                     value: selectedValueOrder,
                     onChanged: (value) {
                       setState(() {
@@ -292,9 +293,10 @@ class _ListDisplayState extends State<ListDisplay> {
                         value: item,
                         child: Text(item),
                       );
-                    }).toList(), // Convert list to dropdown menu items
+                    }).toList(),
                   ),
                   DropdownButton<String>(
+                    padding: const EdgeInsets.only(right: 20),
                     value: selectedValueFilter,
                     onChanged: (value) {
                       setState(() {
@@ -306,7 +308,7 @@ class _ListDisplayState extends State<ListDisplay> {
                         value: item,
                         child: Text(item),
                       );
-                    }).toList(), // Convert list to dropdown menu items
+                    }).toList(),
                   ),
                 ],
               ),
