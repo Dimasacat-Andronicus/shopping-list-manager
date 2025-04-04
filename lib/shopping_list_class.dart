@@ -23,6 +23,17 @@ class ListData {
   static List<ShoppingItem> filteredList = [];
 }
 
+// List of categories for the shopping items
+const List<String> categories = [
+  "Food and Beverages",
+  "Clothing and Accessories",
+  "Health and Hygiene",
+  "Home and Living",
+  "Electronics and Technology",
+  "Entertainment and Hobbies",
+  "Others",
+];
+
 //Decimal point Formatter for price
 class DecimalTextInputFormatter extends TextInputFormatter {
   final int decimalRange;
