@@ -43,9 +43,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = AddItemPage();
-      case 1:
         page = ListPage();
+      case 1:
+        page = AddItemPage();
       default:
         throw UnimplementedError('no widget for $selectedIndex');
     }
@@ -73,8 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (kDebugMode) {
                   print(
                     "${ListData.itemList[item].name}, "
-                        "${ListData.itemList[item].quantity}, "
-                        "${ListData.itemList[item].brand}",
+                    "${ListData.itemList[item].quantity}, "
+                    "${ListData.itemList[item].brand}",
                   );
                 }
               }
@@ -94,12 +94,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     type: BottomNavigationBarType.fixed,
                     items: [
                       BottomNavigationBarItem(
-                        icon: Icon(Icons.add),
-                        label: 'Add Item',
-                      ),
-                      BottomNavigationBarItem(
                         icon: Icon(Icons.list_alt),
                         label: 'Item List',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: Icon(Icons.add),
+                        label: 'Add Item',
                       ),
                     ],
                     currentIndex: selectedIndex,
@@ -120,12 +120,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     extended: constraints.maxWidth >= 600,
                     destinations: [
                       NavigationRailDestination(
-                        icon: Icon(Icons.add),
-                        label: Text('Add Item'),
-                      ),
-                      NavigationRailDestination(
                         icon: Icon(Icons.list_alt),
                         label: Text('Item List'),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.add),
+                        label: Text('Add Item'),
                       ),
                     ],
                     selectedIndex: selectedIndex,
