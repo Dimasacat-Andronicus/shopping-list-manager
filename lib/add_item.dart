@@ -1,4 +1,5 @@
 import 'package:crud_flutter_shopping/reusable_widget.dart';
+import 'package:flutter/services.dart';
 
 import 'shopping_list_class.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,8 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
   final _listName = TextEditingController();
   final _quantity = TextEditingController();
   final _brand = TextEditingController();
+  final _price = TextEditingController();
+  String _selectedCategory = "Others";
 
   void _addItem() {
     var content = "saved";
@@ -42,12 +45,16 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
             name: _listName.text,
             quantity: _quantity.text,
             brand: _brand.text,
+            price: double.tryParse(_price.text) ?? 0.0,
+            category: _selectedCategory,
           ),
         );
         promptDialog(context, content, _listName.text);
         _listName.clear();
         _quantity.clear();
         _brand.clear();
+        _price.clear();
+        _selectedCategory = "Others";
       });
     }
   }
@@ -121,6 +128,73 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
                 ),
               ),
               style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+            ),
+            SizedBox(height: 12),
+            TextField(
+              controller: _price,
+              decoration: InputDecoration(
+                labelText: "Price (optional)",
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    "₱",
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
+                  ),
+                ),
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                DecimalTextInputFormatter(decimalRange: 2),
+              ],
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+            ),
+            SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: _selectedCategory,
+              decoration: InputDecoration(
+                labelText: 'Category',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                prefixIcon: Icon(
+                  Icons.category_outlined,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              items: [
+                DropdownMenuItem(value: "Food", child: Text("Food")),
+                DropdownMenuItem(
+                  value: "Clothes and Accessories",
+                  child: Text("Clothes and Accessories"),
+                ),
+                DropdownMenuItem(value: "Health", child: Text("Health")),
+                DropdownMenuItem(
+                  value: "Electronics",
+                  child: Text("Electronics"),
+                ),
+                DropdownMenuItem(value: "Others", child: Text("Others")),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  _selectedCategory = value!;
+                });
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please select a category';
+                }
+                return null;
+              },
             ),
             SizedBox(height: 20),
             ElevatedButton(
