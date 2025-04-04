@@ -72,8 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
               for (var item = 0; item < ListData.itemList.length; item++) {
                 if (kDebugMode) {
                   print(
-                  "${ListData.itemList[item].name}, ${ListData.itemList[item].quantity}, ${ListData.itemList[item].brand}",
-                );
+                    "${ListData.itemList[item].name}, "
+                        "${ListData.itemList[item].quantity}, "
+                        "${ListData.itemList[item].brand}",
+                  );
                 }
               }
             },
@@ -89,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(child: mainArea),
                 SafeArea(
                   child: BottomNavigationBar(
-                    type: BottomNavigationBarType.fixed, // Set to fixed mode
+                    type: BottomNavigationBarType.fixed,
                     items: [
                       BottomNavigationBarItem(
                         icon: Icon(Icons.add),
