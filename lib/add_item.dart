@@ -172,15 +172,29 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
                 ),
               ),
               items: [
-                DropdownMenuItem(value: "Food", child: Text("Food")),
                 DropdownMenuItem(
-                  value: "Clothes and Accessories",
-                  child: Text("Clothes and Accessories"),
+                  value: "Food and Beverages",
+                  child: Text("Food and Beverages"),
                 ),
-                DropdownMenuItem(value: "Health", child: Text("Health")),
                 DropdownMenuItem(
-                  value: "Electronics",
-                  child: Text("Electronics"),
+                  value: "Clothing and Accessories",
+                  child: Text("Clothing and Accessories"),
+                ),
+                DropdownMenuItem(
+                  value: "Health and Hygiene",
+                  child: Text("Health and Hygiene"),
+                ),
+                DropdownMenuItem(
+                  value: "Home and Living",
+                  child: Text("Home and Living"),
+                ),
+                DropdownMenuItem(
+                  value: "Electronics and Technology",
+                  child: Text("Electronics and Technology"),
+                ),
+                DropdownMenuItem(
+                  value: "Entertainment and Hobbies",
+                  child: Text("Entertainment and Hobbies"),
                 ),
                 DropdownMenuItem(value: "Others", child: Text("Others")),
               ],
