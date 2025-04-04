@@ -1,6 +1,5 @@
 import 'package:crud_flutter_shopping/reusable_widget.dart';
 import 'package:flutter/services.dart';
-
 import 'shopping_list_class.dart';
 import 'package:flutter/material.dart';
 
@@ -171,33 +170,12 @@ class _AddItemDisplayState extends State<AddItemDisplay> {
                   color: Colors.grey.shade600,
                 ),
               ),
-              items: [
-                DropdownMenuItem(
-                  value: "Food and Beverages",
-                  child: Text("Food and Beverages"),
-                ),
-                DropdownMenuItem(
-                  value: "Clothing and Accessories",
-                  child: Text("Clothing and Accessories"),
-                ),
-                DropdownMenuItem(
-                  value: "Health and Hygiene",
-                  child: Text("Health and Hygiene"),
-                ),
-                DropdownMenuItem(
-                  value: "Home and Living",
-                  child: Text("Home and Living"),
-                ),
-                DropdownMenuItem(
-                  value: "Electronics and Technology",
-                  child: Text("Electronics and Technology"),
-                ),
-                DropdownMenuItem(
-                  value: "Entertainment and Hobbies",
-                  child: Text("Entertainment and Hobbies"),
-                ),
-                DropdownMenuItem(value: "Others", child: Text("Others")),
-              ],
+              items: categories.map((String category) {
+                return DropdownMenuItem<String>(
+                  value: category,
+                  child: Text(category),
+                );
+              }).toList(),
               onChanged: (value) {
                 setState(() {
                   _selectedCategory = value!;
