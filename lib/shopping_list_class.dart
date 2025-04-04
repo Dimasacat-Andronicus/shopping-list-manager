@@ -8,4 +8,5 @@ class ShoppingItem {
 
 class ListData {
   static List<ShoppingItem> itemList = [];
+  static List<ShoppingItem> filteredList = [];
 }
