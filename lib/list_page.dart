@@ -1,5 +1,5 @@
 import 'package:crud_flutter_shopping/reusable_widget.dart';
-
+import 'package:flutter/services.dart';
 import 'shopping_list_class.dart';
 import 'package:flutter/material.dart';
 
@@ -43,6 +43,10 @@ class _ListDisplayState extends State<ListDisplay> {
     TextEditingController brandController = TextEditingController(
       text: ListData.itemList[index].brand,
     );
+    TextEditingController priceController = TextEditingController(
+      text: ListData.itemList[index].price.toString(),
+    );
+    String editSelectedCategory = ListData.filteredList[index].category;
 
     showDialog(
       context: context,
@@ -135,6 +139,80 @@ class _ListDisplayState extends State<ListDisplay> {
                     ),
                     style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
                   ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: priceController,
+                    decoration: InputDecoration(
+                      labelText: "Price (optional)",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          "₱",
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d*\.?\d{0,2}'),
+                      ),
+                      DecimalTextInputFormatter(decimalRange: 2),
+                    ],
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade800),
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: editSelectedCategory,
+                    decoration: InputDecoration(
+                      labelText: 'Category',
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      prefixIcon: Icon(
+                        Icons.category_outlined,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                    items: [
+                      DropdownMenuItem(value: "Food", child: Text("Food")),
+                      DropdownMenuItem(
+                        value: "Clothes and Accessories",
+                        child: Text("Clothes and Accessories"),
+                      ),
+                      DropdownMenuItem(value: "Health", child: Text("Health")),
+                      DropdownMenuItem(
+                        value: "Electronics",
+                        child: Text("Electronics"),
+                      ),
+                      DropdownMenuItem(value: "Others", child: Text("Others")),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        editSelectedCategory = value!;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please select a category';
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -154,6 +232,8 @@ class _ListDisplayState extends State<ListDisplay> {
                               nameController.text,
                               quantityController.text,
                               brandController.text,
+                              double.tryParse(priceController.text) ?? 0.0,
+                              editSelectedCategory,
                             );
                             Navigator.of(context).pop();
                             promptDialog(context, content, nameController.text);
@@ -195,11 +275,15 @@ class _ListDisplayState extends State<ListDisplay> {
     String newName,
     String newQuantity,
     String newBrand,
+    double newPrice,
+    String newCategory,
   ) {
     setState(() {
       ListData.itemList[index].name = newName;
       ListData.itemList[index].quantity = newQuantity;
       ListData.itemList[index].brand = newBrand;
+      ListData.itemList[index].price = newPrice;
+      ListData.itemList[index].category = newCategory;
     });
   }
 
@@ -280,7 +364,8 @@ class _ListDisplayState extends State<ListDisplay> {
         ListData.filteredList =
             ListData.itemList.where((item) {
               return item.name.toLowerCase().contains(query.toLowerCase()) ||
-                  item.brand.toLowerCase().contains(query.toLowerCase());
+                  item.brand.toLowerCase().contains(query.toLowerCase()) ||
+                  item.category.toLowerCase().contains(query.toLowerCase());
             }).toList();
       }
     });
@@ -365,32 +450,16 @@ class _ListDisplayState extends State<ListDisplay> {
                                           ),
                                         ),
                                         subtitle: Text(
-                                          (ListData
-                                                      .filteredList[index]
-                                                      .quantity
-                                                      .isNotEmpty
-                                                  ? "Quantity: ${ListData.filteredList[index].quantity}\n"
-                                                  : "") +
-                                              (ListData
-                                                      .filteredList[index]
-                                                      .brand
-                                                      .isNotEmpty
-                                                  ? "Brand: ${ListData.filteredList[index].brand}"
-                                                  : ""),
+                                          "${ListData.filteredList[index].quantity.isNotEmpty ? "Quantity: ${ListData.filteredList[index].quantity}\n" : ""}"
+                                          "${ListData.filteredList[index].brand.isNotEmpty ? "Brand: ${ListData.filteredList[index].brand}\n" : ""}"
+                                          "${ListData.filteredList[index].price > 0 ? "Price: ₱${ListData.filteredList[index].price}\n" : ""}"
+                                          "${ListData.filteredList[index].category.isNotEmpty ? "Category: ${ListData.filteredList[index].category}" : ""}",
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Color(0xFF546E7A),
                                           ),
                                         ),
-                                        isThreeLine:
-                                            ListData
-                                                .filteredList[index]
-                                                .quantity
-                                                .isNotEmpty ||
-                                            ListData
-                                                .filteredList[index]
-                                                .brand
-                                                .isNotEmpty,
+                                        isThreeLine: true,
                                         trailing: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
