@@ -31,10 +31,7 @@ class ListDisplay extends StatefulWidget {
 class _ListDisplayState extends State<ListDisplay> {
   final title = "Edit Item";
   final content = "updated";
-  String? selectedValueOrder = 'Ascending';
-  final List<String> orderItems = ['Ascending', 'Descending'];
-  String? selectedValueFilter = 'by Item Name';
-  final List<String> filterItems = ['by Item Name', 'by Quantity'];
+  TextEditingController searchController = TextEditingController();
 
   void _showEditDialog(int index) {
     TextEditingController nameController = TextEditingController(
@@ -269,134 +266,168 @@ class _ListDisplayState extends State<ListDisplay> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    ListData.filteredList = ListData.itemList;
+  }
+
+  void _filterList(String query) {
+    setState(() {
+      query = query.trim();
+      if (query.isEmpty) {
+        ListData.filteredList = ListData.itemList;
+      } else {
+        ListData.filteredList =
+            ListData.itemList.where((item) {
+              return item.name.toLowerCase().contains(query.toLowerCase()) ||
+                  item.brand.toLowerCase().contains(query.toLowerCase());
+            }).toList();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  DropdownButton<String>(
-                    padding: const EdgeInsets.only(right: 20),
-                    value: selectedValueOrder,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValueOrder = value;
-                      });
-                    },
-                    items: orderItems.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                  ),
-                  DropdownButton<String>(
-                    padding: const EdgeInsets.only(right: 20),
-                    value: selectedValueFilter,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValueFilter = value;
-                      });
-                    },
-                    items: filterItems.map((String item) {
-                      return DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child:
-                  ListData.itemList.isEmpty
-                      ? Center(
-                        child: Text(
-                          "No items in the list",
-                          style: TextStyle(color: Color(0xFF546E7A)),
-                        ),
-                      )
-                      : ListView.builder(
-                        itemCount: ListData.itemList.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 15),
-                            child: Card(
-                              elevation: 6,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: ListTile(
-                                tileColor: Color(0xFFF0F4F8),
-                                contentPadding: EdgeInsets.all(5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                title: Text(
-                                  ListData.itemList[index].name,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color(0xFF546E7A),
+      body:
+          ListData.itemList.isEmpty
+              ? Center(
+                child: Text(
+                  "No items in the list",
+                  style: TextStyle(color: Color(0xFF546E7A)),
+                ),
+              )
+              : Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: searchController,
+                              decoration: InputDecoration(
+                                labelText: "Search",
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
                                   ),
                                 ),
-                                subtitle: Text(
-                                  (ListData.itemList[index].quantity.isNotEmpty
-                                          ? "Quantity: ${ListData.itemList[index].quantity}\n"
-                                          : "") +
-                                      (ListData.itemList[index].brand.isNotEmpty
-                                          ? "Brand: ${ListData.itemList[index].brand}"
-                                          : ""),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Color(0xFF546E7A),
-                                  ),
-                                ),
-                                isThreeLine:
-                                    ListData
-                                        .itemList[index]
-                                        .quantity
-                                        .isNotEmpty ||
-                                    ListData.itemList[index].brand.isNotEmpty,
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                      ),
-                                      onPressed: () => _showEditDialog(index),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.primary,
-                                      ),
-                                      onPressed: () => _showRemoveDialog(index),
-                                    ),
-                                  ],
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: Colors.grey.shade600,
                                 ),
                               ),
+                              onChanged: _filterList,
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-            ),
-          ],
-        ),
-      ),
+                    ),
+                    Expanded(
+                      child:
+                          ListData.filteredList.isEmpty
+                              ? Center(
+                                child: Text(
+                                  "No results found",
+                                  style: TextStyle(color: Color(0xFF546E7A)),
+                                ),
+                              )
+                              : ListView.builder(
+                                itemCount: ListData.filteredList.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: Card(
+                                      elevation: 6,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ListTile(
+                                        tileColor: Color(0xFFF0F4F8),
+                                        contentPadding: EdgeInsets.all(5),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          ListData.filteredList[index].name,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Color(0xFF546E7A),
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          (ListData
+                                                      .filteredList[index]
+                                                      .quantity
+                                                      .isNotEmpty
+                                                  ? "Quantity: ${ListData.filteredList[index].quantity}\n"
+                                                  : "") +
+                                              (ListData
+                                                      .filteredList[index]
+                                                      .brand
+                                                      .isNotEmpty
+                                                  ? "Brand: ${ListData.filteredList[index].brand}"
+                                                  : ""),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Color(0xFF546E7A),
+                                          ),
+                                        ),
+                                        isThreeLine:
+                                            ListData
+                                                .filteredList[index]
+                                                .quantity
+                                                .isNotEmpty ||
+                                            ListData
+                                                .filteredList[index]
+                                                .brand
+                                                .isNotEmpty,
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                              ),
+                                              onPressed:
+                                                  () => _showEditDialog(index),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color:
+                                                    Theme.of(
+                                                      context,
+                                                    ).colorScheme.primary,
+                                              ),
+                                              onPressed:
+                                                  () =>
+                                                      _showRemoveDialog(index),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                    ),
+                  ],
+                ),
+              ),
     );
   }
 }
